@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">MySecretDiary</string>
+
+    <string name="tv_fg_gd_pw">If you want to meet with your friend secretly, please set a password:</string>
+    <string name="tv_fg_gd_nm">This diary will become your best friend, would you like to give a nick name to your new friend:</string>
+</resources>
