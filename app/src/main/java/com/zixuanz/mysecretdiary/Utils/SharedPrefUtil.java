@@ -7,7 +7,12 @@ import android.content.SharedPreferences;
  * Created by Celleria on 2/15/17.
  */
 
-public class SharedPreferenceUtil {
+public class SharedPrefUtil {
+
+    public static final String PREF_NAME = "pref_general";
+    public static final String VAL_FIRST = "isFirstTime";
+    public static final String VAL_PASS = "password";
+    public static final String VAL_NAME = "name";
 
     /**
      * Get corresponding String type value by given key in SharedPreference named prefName.

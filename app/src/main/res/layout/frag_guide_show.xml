@@ -7,22 +7,20 @@
     android:gravity="center_horizontal">
 
     <TextView
+        android:id="@+id/tv_fg_show"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/tv_fg_gd_pw"
-        android:id="@+id/textView" />
-
-    <EditText
-        android:id="@+id/et_frag_gd_pw"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="numberPassword"
-        android:hint="@string/et_fg_gd_pw_hint"
-        android:maxLines="1"/>
+        android:layout_height="wrap_content" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/tv_fg_gd_txt"/>
+        android:text="@string/tv_fg_gd_show_ensure" />
+
+
+    <Button
+        android:id="@+id/btn_fg_show_enter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter"/>
 
 </LinearLayout>

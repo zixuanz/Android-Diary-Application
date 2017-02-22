@@ -2,5 +2,16 @@
     <string name="app_name">MySecretDiary</string>
 
     <string name="tv_fg_gd_pw">If you want to meet with your friend secretly, please set a password:</string>
+    <string name="et_fg_gd_pw_hint">At most 10 digits</string>
+
     <string name="tv_fg_gd_nm">This diary will become your best friend, would you like to give a nick name to your new friend:</string>
+    <string name="et_fg_gd_nm_hint">At most 10 letters</string>
+
+    <string name="tv_fg_gd_txt">If you do not want to give, just slide to the next.\nYou can slide back to define it before end of guide.</string>
+
+    <string name="tv_fg_gd_show_nm_yes">Now, your new friend\'s name is </string>
+    <string name="tv_fg_gd_show_nm_no">You do not set a name</string>
+    <string name="tv_fg_gd_show_pw_yes">You set a secret word to meet your friend</string>
+    <string name="tv_fg_gd_show_pw_no">You do not need secret digits to meet your friend</string>
+    <string name="tv_fg_gd_show_ensure">If you are not satisfied, you can slide back to modify.\nIf everything is ok, you can enter the room of you friend\'s</string>
 </resources>

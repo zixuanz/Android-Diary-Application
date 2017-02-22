@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.zixuanz.mysecretdiary.Utils.SharedPreferenceUtil;
+import com.zixuanz.mysecretdiary.Utils.SharedPrefUtil;
 
 public class WelcomeActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -19,7 +19,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        boolean isFirstTime = SharedPreferenceUtil.getValue("General", "first", false, this);
+        boolean isFirstTime = SharedPrefUtil.getValue(SharedPrefUtil.PREF_NAME, SharedPrefUtil.VAL_FIRST, true, this);
         if(isFirstTime){
             Intent intent = new Intent(this, GuideActivity.class);
             startActivity(intent);

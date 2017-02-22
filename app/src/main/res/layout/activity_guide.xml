@@ -30,6 +30,13 @@
             android:src="@drawable/wel_gd_dot"
             />
 
+        <ImageView
+            android:id="@+id/iv_dot2"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:src="@drawable/wel_gd_dot"
+            />
+
     </LinearLayout>
 
 </RelativeLayout>

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import com.zixuanz.mysecretdiary.Fragments.Guide.NameFrag;
 import com.zixuanz.mysecretdiary.Fragments.Guide.PasswordFrag;
+import com.zixuanz.mysecretdiary.Fragments.Guide.ShowFrag;
 import com.zixuanz.mysecretdiary.GuideActivity;
 
 /**
@@ -15,15 +16,17 @@ import com.zixuanz.mysecretdiary.GuideActivity;
 
 public class GuideFragPagerAdapter extends FragmentPagerAdapter {
 
-    private static final int PAGE_NUM = 2;
+    private static final int PAGE_NUM = 3;
+
     private PasswordFrag passwordFrag;
     private NameFrag nameFrag;
+    private ShowFrag showFrag;
 
     public GuideFragPagerAdapter(FragmentManager fm) {
-
         super(fm);
         passwordFrag = new PasswordFrag();
         nameFrag = new NameFrag();
+        showFrag = new ShowFrag();
     }
 
     @Override
@@ -46,6 +49,9 @@ public class GuideFragPagerAdapter extends FragmentPagerAdapter {
                 break;
             case GuideActivity.PAGE_PW:
                 fragment = passwordFrag;
+                break;
+            case GuideActivity.PAGE_SHOW:
+                fragment = showFrag;
                 break;
         }
         return fragment;
