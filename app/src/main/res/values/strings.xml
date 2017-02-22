@@ -1,6 +1,16 @@
 <resources>
     <string name="app_name">MySecretDiary</string>
 
+    <!--Common words-->
+    <string name="ok">OK</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="cancel">Cancel</string>
+    <string name="Enter">Enter</string>
+    <string name="wanning">Wanning</string>
+    <string name="bye">Bye Bye</string>
+
+    <!--In GuideFragment and corresponding xml-->
     <string name="tv_fg_gd_pw">If you want to meet with your friend secretly, please set a password:</string>
     <string name="et_fg_gd_pw_hint">At most 10 digits</string>
 
@@ -14,4 +24,10 @@
     <string name="tv_fg_gd_show_pw_yes">You set a secret word to meet your friend</string>
     <string name="tv_fg_gd_show_pw_no">You do not need secret digits to meet your friend</string>
     <string name="tv_fg_gd_show_ensure">If you are not satisfied, you can slide back to modify.\nIf everything is ok, you can enter the room of you friend\'s</string>
+
+    <!--In PasswordActivity and corresponding xml-->
+    <string name="dia_msg">Password is wrong.</string>
+
+    <string name="tv_act_pw">Please enter you secrete word to unlock the door to your friend!</string>
+
 </resources>

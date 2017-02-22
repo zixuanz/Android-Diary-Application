@@ -59,8 +59,8 @@ public class ShowFrag extends Fragment{
 
     private String getShowText(){
         String str = "";
-        String name = SharedPrefUtil.getValue(SharedPrefUtil.PREF_NAME, SharedPrefUtil.VAL_NAME, "", getContext());
-        String pw = SharedPrefUtil.getValue(SharedPrefUtil.PREF_NAME, SharedPrefUtil.VAL_PASS, "", getContext());
+        String name = SharedPrefUtil.getValue(SharedPrefUtil.GUIDE, SharedPrefUtil.VAL_NAME, "", getContext());
+        String pw = SharedPrefUtil.getValue(SharedPrefUtil.GUIDE, SharedPrefUtil.VAL_PASS, "", getContext());
 
         if(name.equals("")){
             str += this.getString(R.string.tv_fg_gd_show_nm_no) + "/n";

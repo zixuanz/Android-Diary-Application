@@ -9,7 +9,7 @@ import android.content.SharedPreferences;
 
 public class SharedPrefUtil {
 
-    public static final String PREF_NAME = "pref_general";
+    public static final String GUIDE = "pref_general";
     public static final String VAL_FIRST = "isFirstTime";
     public static final String VAL_PASS = "password";
     public static final String VAL_NAME = "name";

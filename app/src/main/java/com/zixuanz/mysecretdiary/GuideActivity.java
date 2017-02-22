@@ -91,7 +91,7 @@ public class GuideActivity extends AppCompatActivity implements ViewPager.OnPage
 
     @Override
     public void onEnter() {
-        SharedPrefUtil.setValue(SharedPrefUtil.PREF_NAME, SharedPrefUtil.VAL_FIRST, false, getApplicationContext());
+        SharedPrefUtil.setValue(SharedPrefUtil.GUIDE, SharedPrefUtil.VAL_FIRST, false, getApplicationContext());
         Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
         finish();

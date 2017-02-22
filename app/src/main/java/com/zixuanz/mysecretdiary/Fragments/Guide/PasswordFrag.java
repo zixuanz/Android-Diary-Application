@@ -63,7 +63,7 @@ public class PasswordFrag extends Fragment {
     }
 
     public void updateViews(){
-        //pwEditText.setText(SharedPrefUtil.getValue(WelcomeActivity.PREF_NAME, WelcomeActivity.VAL_PASS, "", getContext()));
+        //pwEditText.setText(SharedPrefUtil.getValue(WelcomeActivity.GUIDE, WelcomeActivity.VAL_PASS, "", getContext()));
     }
 
     public boolean saveInfo(){
@@ -72,6 +72,6 @@ public class PasswordFrag extends Fragment {
         if(pw.equals("")){
             return true;
         }
-        return SharedPrefUtil.setValue(SharedPrefUtil.PREF_NAME, SharedPrefUtil.VAL_PASS, pw, getContext());
+        return SharedPrefUtil.setValue(SharedPrefUtil.GUIDE, SharedPrefUtil.VAL_PASS, pw, getContext());
     }
 }

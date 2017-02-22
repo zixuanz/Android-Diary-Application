@@ -63,7 +63,7 @@ public class NameFrag extends Fragment {
     }
 
     public void updateViews(){
-        //nameEditText.setText(SharedPrefUtil.getValue(WelcomeActivity.PREF_NAME, WelcomeActivity.VAL_NAME, "", getContext()));
+        //nameEditText.setText(SharedPrefUtil.getValue(WelcomeActivity.GUIDE, WelcomeActivity.VAL_NAME, "", getContext()));
     }
 
     public boolean saveInfo(){
@@ -72,7 +72,7 @@ public class NameFrag extends Fragment {
 
         if(name.equals(""))
             return true;
-        return SharedPrefUtil.setValue(SharedPrefUtil.PREF_NAME, SharedPrefUtil.VAL_NAME, name, getContext());
+        return SharedPrefUtil.setValue(SharedPrefUtil.GUIDE, SharedPrefUtil.VAL_NAME, name, getContext());
     }
 
 }
