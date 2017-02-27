@@ -1,6 +1,7 @@
 package com.zixuanz.mysecretdiary;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -11,10 +12,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 
 import com.zixuanz.mysecretdiary.Adapters.HomeRecyViewAdapter;
 import com.zixuanz.mysecretdiary.DataStructures.Home.Diary;
+import com.zixuanz.mysecretdiary.Utils.DataBaseManager;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,7 +30,10 @@ public class HomeActivity extends AppCompatActivity{
 
     private FloatingActionButton newDiary;
 
+    private DataBaseManager dbManager;
     private List<Diary> diaries;
+
+    private boolean isNotWritten = true;
 
 
     @Override
@@ -37,8 +41,32 @@ public class HomeActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        initDataDiary();
+        dbManager = new DataBaseManager(getApplicationContext());
+        diaries = new ArrayList<>();
         initView();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("HomeActivity:::", "onPause");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("HomeActivity:::", "onResume");
+        AcquireDiary acquireDiary = new AcquireDiary();
+        acquireDiary.execute();
+        Log.d("HomeActivity:::", "diaries--"+diaries.size());
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("HomeActivity:::", "onDestroy");
+        dbManager.closeDatabase();
     }
 
     private void initView() {
@@ -55,9 +83,15 @@ public class HomeActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this, WritingActivity.class);
+                intent.putExtra("isNotWritten", isNotWritten);
                 startActivity(intent);
             }
         });
+    }
+
+    private void updateView(){
+        homeRecyViewAdapter = new HomeRecyViewAdapter(diaries, HomeActivity.this);
+        recyclerView.setAdapter(homeRecyViewAdapter);
     }
 
     private void initToolbar(){
@@ -77,16 +111,23 @@ public class HomeActivity extends AppCompatActivity{
         });
     }
 
-    private void initDataDiary() {
-        diaries = new ArrayList<>(8);
-        diaries.add(new Diary(new Date(), "Hello", "happy", "nicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenicenice"));
-        diaries.add(new Diary(new Date(), "NULL", "NULL", "NULL"));
-        diaries.add(new Diary(new Date(), "NULL", "NULL", "NULL"));
-        diaries.add(new Diary(new Date(), "NULL", "NULL", "NULL"));
-        diaries.add(new Diary(new Date(), "NULL", "NULL", "NULL"));
-        diaries.add(new Diary(new Date(), "NULL", "NULL", "NULL"));
-        diaries.add(new Diary(new Date(), "NULL", "NULL", "NULL"));
-        diaries.add(new Diary(new Date(), "NULL", "NULL", "NULL"));
+    private void setDataDiary() {
+        dbManager.queryAll(diaries);
+    }
+
+
+    private class AcquireDiary extends AsyncTask<Void, Void, Void>{
+        @Override
+        protected Void doInBackground(Void... params) {
+            dbManager.openReadableDatabase();
+            setDataDiary();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            homeRecyViewAdapter.notifyDataSetChanged();
+        }
     }
 
 }

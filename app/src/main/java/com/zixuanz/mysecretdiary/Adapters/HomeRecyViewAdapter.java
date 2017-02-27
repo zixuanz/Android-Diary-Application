@@ -67,7 +67,7 @@ public class HomeRecyViewAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof WithoutImageHolder){
-            ((WithoutImageHolder)holder).date.setText(diaries.get(position).getDate().toString());
+            ((WithoutImageHolder)holder).date.setText(diaries.get(position).getCreateDateTime());
             ((WithoutImageHolder)holder).weather.setText(diaries.get(position).getWeather());
             ((WithoutImageHolder)holder).emotion.setText(diaries.get(position).getEmotion());
             ((WithoutImageHolder)holder).ctx.setText(diaries.get(position).getDiaryText());

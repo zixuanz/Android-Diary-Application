@@ -7,26 +7,36 @@ import java.util.Date;
  */
 
 public class Diary {
-    private Date date;
+    private String createDateTime;
+    private String lastDateTime;
     private String weather;
     private String emotion;
     private String diaryText;
     private int imgID;
 
-    public Diary(Date date, String weather, String emotion, String diaryText) {
-        this.date = date;
+    public Diary(String createDateTime, String lastDateTime, String weather, String emotion, String diaryText) {
+        this.createDateTime = createDateTime;
+        this.lastDateTime = "ddd";
         this.weather = weather;
         this.emotion = emotion;
         this.diaryText = diaryText;
         this.imgID = -1;
     }
 
-    public Date getDate() {
-        return date;
+    public String getCreateDateTime() {
+        return createDateTime;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setCreateDateTime(String createDateTime) {
+        this.createDateTime = createDateTime;
+    }
+
+    public String getLastDateTime() {
+        return lastDateTime;
+    }
+
+    public void setLastDateTime(String lastDateTime) {
+        this.lastDateTime = lastDateTime;
     }
 
     public String getWeather() {
