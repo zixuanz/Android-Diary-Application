@@ -1,6 +1,6 @@
 package com.zixuanz.mysecretdiary.DataStructures.Home;
 
-import java.util.Date;
+import com.zixuanz.mysecretdiary.Utils.Tools;
 
 /**
  * Created by Zixuan Zhao on 2/19/17.
@@ -69,5 +69,10 @@ public class Diary {
 
     public void setImgID(int imgID) {
         this.imgID = imgID;
+    }
+
+    public String[] diaryInfo(){
+        String[] diary = {createDateTime, lastDateTime, weather, emotion, diaryText};
+        return diary;
     }
 }

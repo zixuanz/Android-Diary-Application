@@ -11,13 +11,15 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.zixuanz.mysecretdiary.DataStructures.Home.Diary;
 import com.zixuanz.mysecretdiary.Utils.DataBaseManager;
+import com.zixuanz.mysecretdiary.Utils.Tools;
 
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class WritingActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+public class WritingActivity extends AppCompatActivity {
 
     private TextView weather;
     private TextView emotion;
@@ -26,44 +28,53 @@ public class WritingActivity extends AppCompatActivity implements LoaderManager.
 
     private Timer timer;
     private TimerTask autoSave;
+    private TimerTask closeDatabase;
 
     private DataBaseManager dbManager;
 
     private boolean isNotWritten;
+    private String[] editedText = new String[6];
+    private String today;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_writing);
 
-        Intent intent = new Intent();
-        isNotWritten = intent.getBooleanExtra("isNotWritten", true);
+        today = Tools.getCurrentDate();
+        Log.d("WrittingAcitivity:::", today);
 
-        initViews();
         dbManager = new DataBaseManager(getApplicationContext());
+        initViews();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d("WrittingActivity:::", "onPause");
-        timer.cancel();
+        Log.d("WritingActivity:::", "onPause");
+        cancelAutoSaving();                                     //cancel timer task autosaving
+
+        SavingDiary savingDiary = new SavingDiary();            //save edited text
+        savingDiary.execute(getEditedText());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("WrittingActivity:::", "onResume");
-        autoSaving();
+        Log.d("WritingActivity:::", "onResume");
+        loadEditedText();                                             //load and set text from database to views
+        autoSaving();                                           //start autosaving again
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d("WrittingActivity:::", "onDestroy");
-        timer.cancel();
+        Log.d("WritingActivity:::", "onDestroy");
+
+        cancelAutoSaving();                                     //make sure cancel autosaving task
+        //closingDatabase();
         boolean flag = dbManager.closeDatabase();
-        Log.d("WrittingActivity:::", "CLOSE DATABASE? "+flag);
+        Log.d("WritingActivity:::", "CLOSE DATABASE? "+flag);
     }
 
     /**
@@ -90,14 +101,26 @@ public class WritingActivity extends AppCompatActivity implements LoaderManager.
      * Get neccessary data from view preparing to be saved
      * @return An array of String type.
      */
-    private String[] getText(){
-        String strEmotion = emotion.getText().toString();
-        String strWeather = weather.getText().toString();
-        String strContext = diaryText.getText().toString();
+    private String[] getEditedText(){
+        String strCreateDate = "";
+        if(isNotWritten){
+            strCreateDate = Tools.getCurrentDateTime();
+        }
         String strLastDate = new Date().toString();
+        String strWeather = weather.getText().toString();
+        String strEmotion = emotion.getText().toString();
+        String strContext = diaryText.getText().toString();
 
-        String texts[] = {strLastDate, strWeather, strEmotion, strContext};
+        String texts[] = {today, strCreateDate, strLastDate, strWeather, strEmotion, strContext};
         return texts;
+    }
+
+    /**
+     * Set text for views
+     */
+    private void loadEditedText(){
+        LoadingDiary load = new LoadingDiary();
+        load.execute();
     }
 
     /**
@@ -107,7 +130,7 @@ public class WritingActivity extends AppCompatActivity implements LoaderManager.
         autoSave = new TimerTask() {
             @Override
             public void run() {
-                String texts[] = getText();
+                String texts[] = getEditedText();
                 SavingDiary save = new SavingDiary();
                 save.execute(texts);
             }
@@ -117,19 +140,50 @@ public class WritingActivity extends AppCompatActivity implements LoaderManager.
         timer.schedule(autoSave, 5000, 15000);
     }
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return null;
+    private void cancelAutoSaving(){
+        timer.cancel();
     }
 
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    private void closingDatabase(){
+        closeDatabase = new TimerTask() {
+            @Override
+            public void run() {
+                boolean flag = dbManager.closeDatabase();
+                Log.d("WritingActivity:::", "CLOSE DATABASE? "+flag);
+            }
+        };
 
+        timer = new Timer();
+        timer.schedule(closeDatabase, 100000);
     }
 
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    private class LoadingDiary extends AsyncTask<Void, Void, Void>{
+        @Override
+        protected Void doInBackground(Void... params) {
+            dbManager.openWritableDatabase();
+            if(dbManager.queryToday(today)){
+                isNotWritten = false;
+                Diary d = dbManager.query(today);
+                editedText[0] = today;
+                editedText[1] = d.getCreateDateTime();
+                editedText[2] = d.getLastDateTime();
+                editedText[3] = d.getWeather();
+                editedText[4] = d.getEmotion();
+                editedText[5] = d.getDiaryText();
+                Log.d("WrittingActivity:::", editedText[5]);
+            }else{
+                isNotWritten = true;
+            }
 
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            weather.setText(editedText[3]);
+            emotion.setText(editedText[4]);
+            diaryText.setText(editedText[5]);
+        }
     }
 
     private class SavingDiary extends AsyncTask<String, Void, Void> {
@@ -137,24 +191,15 @@ public class WritingActivity extends AppCompatActivity implements LoaderManager.
         @Override
         protected Void doInBackground(String... params) {
             dbManager.openWritableDatabase();
-            dbManager.insert(new Date().toString(), "aa", new Date().toString(),params[1], params[2], params[3]);
-            /*
-            boolean flag = false;
-            boolean flag2 = false;
             if(isNotWritten){
-                flag = dbManager.insert("aaa", "aa", new Date().toString(),params[1], params[2], params[3]);
+                boolean flagInsert = dbManager.insert(getEditedText());
                 isNotWritten = false;
-
+                Log.d("WrittingActivity:::", "INSERT--" + flagInsert);
             }else{
-                flag2 = dbManager.update("aaa", "aaa", "aaa", "aaa", "aaa");
+                boolean flagUpdate = dbManager.update(getEditedText());
+                Log.d("WrittingActivity:::", "UPDATE--" + flagUpdate);
             }
-            Log.d("WritingActivity:::", "ISNOTWRITTEN--"+isNotWritten);
-//            Log.d("WrittingActivity:::", params[0]);
 
-  //          Log.d("WrittingActivity:::", params[3]);
-            Log.d("WrittingActivity:::", "INSERT--" + flag);
-            Log.d("WrittingActivity:::", "INSERT--" + flag2);
-*/
             return null;
         }
     }

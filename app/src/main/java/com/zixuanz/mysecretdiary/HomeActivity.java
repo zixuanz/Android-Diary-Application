@@ -16,10 +16,12 @@ import android.view.View;
 import com.zixuanz.mysecretdiary.Adapters.HomeRecyViewAdapter;
 import com.zixuanz.mysecretdiary.DataStructures.Home.Diary;
 import com.zixuanz.mysecretdiary.Utils.DataBaseManager;
+import com.zixuanz.mysecretdiary.Utils.Tools;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class HomeActivity extends AppCompatActivity{
 
@@ -33,17 +35,13 @@ public class HomeActivity extends AppCompatActivity{
     private DataBaseManager dbManager;
     private List<Diary> diaries;
 
-    private boolean isNotWritten = true;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
         dbManager = new DataBaseManager(getApplicationContext());
-        diaries = new ArrayList<>();
-        initView();
+        initViews();
     }
 
     @Override
@@ -55,7 +53,9 @@ public class HomeActivity extends AppCompatActivity{
     @Override
     protected void onResume() {
         super.onResume();
+
         Log.d("HomeActivity:::", "onResume");
+
         AcquireDiary acquireDiary = new AcquireDiary();
         acquireDiary.execute();
         Log.d("HomeActivity:::", "diaries--"+diaries.size());
@@ -69,9 +69,11 @@ public class HomeActivity extends AppCompatActivity{
         dbManager.closeDatabase();
     }
 
-    private void initView() {
+    private void initViews() {
 
         initToolbar();
+
+        diaries = new ArrayList<>();
 
         recyclerView = (RecyclerView) findViewById(R.id.rv_home);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -83,15 +85,9 @@ public class HomeActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this, WritingActivity.class);
-                intent.putExtra("isNotWritten", isNotWritten);
                 startActivity(intent);
             }
         });
-    }
-
-    private void updateView(){
-        homeRecyViewAdapter = new HomeRecyViewAdapter(diaries, HomeActivity.this);
-        recyclerView.setAdapter(homeRecyViewAdapter);
     }
 
     private void initToolbar(){
@@ -113,6 +109,15 @@ public class HomeActivity extends AppCompatActivity{
 
     private void setDataDiary() {
         dbManager.queryAll(diaries);
+    }
+
+
+    private class CheckToday extends AsyncTask<Void, Void, Void>{
+        @Override
+        protected Void doInBackground(Void... params) {
+            dbManager.openReadableDatabase();
+            return null;
+        }
     }
 
 

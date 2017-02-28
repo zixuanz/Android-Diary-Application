@@ -98,6 +98,22 @@ public class DataBaseManager {
         return (id != -1);
     }
 
+    public boolean insert(String diary[]){
+        if(diary == null){
+            return false;
+        }
+        ContentValues cv = new ContentValues();
+        cv.put(COL_DATE, diary[0]);
+        cv.put(COL_CRE_DT, diary[1]);
+        cv.put(COL_MOD_DT, diary[2]);
+        cv.put(COL_WEATHER, diary[3]);
+        cv.put(COL_EMOTION, diary[4]);
+        cv.put(COL_DIARYTEXT, diary[5]);
+
+        long id = db.insert(TB_NAME, null, cv);
+        return (id != -1);
+    }
+
     /**
      * Update diary info by date
      * @param date
@@ -115,6 +131,22 @@ public class DataBaseManager {
         cv.put(COL_DIARYTEXT, diaryText);
 
         String args[] = {date};
+        int rows = db.update(TB_NAME, cv, COL_DATE + " = ?", args);
+
+        return (rows != 0);
+    }
+
+    public boolean update(String diary[]){
+        if(diary == null){
+            return false;
+        }
+        ContentValues cv = new ContentValues();
+        cv.put(COL_MOD_DT, diary[2]);
+        cv.put(COL_WEATHER, diary[3]);
+        cv.put(COL_EMOTION, diary[4]);
+        cv.put(COL_DIARYTEXT, diary[5]);
+
+        String args[] = {diary[0]};
         int rows = db.update(TB_NAME, cv, COL_DATE + " = ?", args);
 
         return (rows != 0);
@@ -174,9 +206,10 @@ public class DataBaseManager {
         return d;
     }
 
+
     /**
-     * Query all diary info
-     * @return a list of object diary
+     * Query all diary info and add all to data list
+     * @param datalist
      */
     public void queryAll(List<Diary> datalist){
         String projection[] = {
@@ -198,6 +231,7 @@ public class DataBaseManager {
         );
         //Log.d("DataBaseManager:::", "cursor count--"+cursor.getCount());
 
+        datalist.clear();
         if(cursor.moveToFirst()){
             do{
                 Diary d = new Diary(
@@ -207,12 +241,29 @@ public class DataBaseManager {
                         cursor.getString(cursor.getColumnIndex(COL_EMOTION)),
                         cursor.getString(cursor.getColumnIndex(COL_DIARYTEXT))
                 );
-                Log.d("DataBaseManager:::", "datalist time--"+d.getCreateDateTime());
+                //Log.d("DataBaseManager:::", "datalist time--"+d.getCreateDateTime());
                 datalist.add(d);
             }while(cursor.moveToNext());
         }
         cursor.close();
         //Log.d("DataBaseManager:::", "datalist--"+datalist.size());
+    }
+
+    public boolean queryToday(String today){
+
+        String[] args = {today};
+        Cursor cursor = db.query(
+                TB_NAME,
+                null,
+                COL_DATE + " = ?",
+                args,
+                null,
+                null,
+                COL_DATE + " DESC"
+        );
+        //Log.d("DataBaseManager:::", "cursor count--"+cursor.getCount());
+
+        return cursor.moveToFirst();
     }
 
 }
