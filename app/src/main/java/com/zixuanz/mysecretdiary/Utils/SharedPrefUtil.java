@@ -13,6 +13,8 @@ public class SharedPrefUtil {
     public static final String VAL_FIRST = "isFirstTime";
     public static final String VAL_PASS = "password";
     public static final String VAL_NAME = "name";
+    public static final String VAL_QUE = "security_que";
+    public static final String VAL_ANSWER = "security_ans";
 
     /**
      * Get corresponding String type value by given key in SharedPreference named prefName.
@@ -30,6 +32,11 @@ public class SharedPrefUtil {
     public static boolean getValue(String prefName, String key, boolean defValue, Context context) {
         SharedPreferences sp = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
         return sp.getBoolean(key, defValue);
+    }
+
+    public static int getValue(String prefName, String key, int defValue, Context context) {
+        SharedPreferences sp = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
+        return sp.getInt(key, defValue);
     }
     /**
      * Input key-value info into SharedPreference named prefName
@@ -52,6 +59,14 @@ public class SharedPrefUtil {
         SharedPreferences.Editor editor = sp.edit();
 
         editor.putBoolean(key, value);
+        return editor.commit();
+    }
+
+    public static boolean setValue(String prefName, String key, int value, Context context){
+        SharedPreferences sp = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+
+        editor.putInt(key, value);
         return editor.commit();
     }
 

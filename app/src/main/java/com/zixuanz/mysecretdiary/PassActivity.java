@@ -2,21 +2,28 @@ package com.zixuanz.mysecretdiary;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.zixuanz.mysecretdiary.Fragments.ResetPasswordFragment;
 import com.zixuanz.mysecretdiary.Utils.SharedPrefUtil;
 
 public class PassActivity extends AppCompatActivity implements View.OnClickListener{
 
     private EditText editPassWord;
+    private TextView textForget;
     private Button btnCancel;
     private Button btnEnter;
+
+    //private ResetPasswordFragment resetFrag;
 
 
     @Override
@@ -30,16 +37,27 @@ public class PassActivity extends AppCompatActivity implements View.OnClickListe
     private void initViews(){
         editPassWord = (EditText) findViewById(R.id.et_act_pw);
 
+        textForget = (TextView) findViewById(R.id.tv_act_pw_forget);
+        textForget.setOnClickListener(this);
+
         btnCancel = (Button) findViewById(R.id.btn_no_act_pw);
         btnCancel.setOnClickListener(this);
 
         btnEnter = (Button) findViewById(R.id.btn_yes_act_pw);
         btnEnter.setOnClickListener(this);
 
+        //resetFrag = new ResetPasswordFragment();
+
     }
 
     @Override
     public void onClick(View v) {
+
+        if(v.equals(textForget)){
+            Intent intent = new Intent(this, ResetPwActivity.class);
+            startActivity(intent);
+        }
+
         if(v.equals(btnEnter)){
             if(canEnter()){
                 Intent intent = new Intent(this, HomeActivity.class);

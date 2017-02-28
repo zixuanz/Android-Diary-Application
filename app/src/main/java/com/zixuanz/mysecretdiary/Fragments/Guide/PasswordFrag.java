@@ -7,7 +7,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.zixuanz.mysecretdiary.R;
 import com.zixuanz.mysecretdiary.Utils.SharedPrefUtil;
@@ -20,6 +22,10 @@ import com.zixuanz.mysecretdiary.WelcomeActivity;
 public class PasswordFrag extends Fragment {
 
     private EditText pwEditText;
+    private Spinner securtySpinner;
+    private EditText answerEditText;
+
+    private int spinnerPos = 0;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,6 +66,21 @@ public class PasswordFrag extends Fragment {
 
     private void initViews(View view){
         pwEditText = (EditText) view.findViewById(R.id.et_frag_gd_pw);
+        securtySpinner = (Spinner) view.findViewById(R.id.sp_fg_gd_sl);
+        answerEditText = (EditText) view.findViewById(R.id.et_fg_gd_ans);
+
+        securtySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                spinnerPos = position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
     }
 
     public void updateViews(){
@@ -67,11 +88,24 @@ public class PasswordFrag extends Fragment {
     }
 
     public boolean saveInfo(){
-        String pw = pwEditText.getText().toString();
-        Log.d("PasswordFrag:::", "saveInfo: pw--"+pw);
-        if(pw.equals("")){
+        boolean flag1, flag2 = true;
+        boolean flag3 = true;
+
+        String str = pwEditText.getText().toString();
+        Log.d("PasswordFrag:::", "saveInfo: pw--"+str);
+        if(str.equals("")){
             return true;
         }
-        return SharedPrefUtil.setValue(SharedPrefUtil.GUIDE, SharedPrefUtil.VAL_PASS, pw, getContext());
+        flag1 = SharedPrefUtil.setValue(SharedPrefUtil.GUIDE, SharedPrefUtil.VAL_PASS, str, getContext());
+
+        if(spinnerPos != 0){
+            flag2 = SharedPrefUtil.setValue(SharedPrefUtil.GUIDE, SharedPrefUtil.VAL_QUE, spinnerPos, getContext());
+            Log.d("PasswordFrag:::", "saveInfo: pos--"+spinnerPos);
+            str = answerEditText.getText().toString();
+            flag3 = SharedPrefUtil.setValue(SharedPrefUtil.GUIDE, SharedPrefUtil.VAL_ANSWER, str, getContext());
+            Log.d("PasswordFrag:::", "saveInfo: answer--"+str);
+        }
+
+        return flag1 && flag2 && flag3;
     }
 }
