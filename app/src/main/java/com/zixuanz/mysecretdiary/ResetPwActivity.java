@@ -13,6 +13,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.zixuanz.mysecretdiary.Utils.DataBaseManager;
 import com.zixuanz.mysecretdiary.Utils.SharedPrefUtil;
 
 import java.util.Random;
@@ -26,14 +27,23 @@ public class ResetPwActivity extends AppCompatActivity implements View.OnClickLi
     private Button btnEnter;
 
     private int spinnerPos, q1, q2;
-    private final String questions[] = {"aa", "bb"};
+    private final String questions[] = {
+            getResources().getString(R.string.reset_q1),
+            getResources().getString(R.string.reset_q2),
+            getResources().getString(R.string.reset_q3),
+            getResources().getString(R.string.reset_q4)
+    };
+
+    private DataBaseManager dbManager;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_pw);
+
         initViews();
+
     }
 
     public void initViews(){
@@ -71,7 +81,9 @@ public class ResetPwActivity extends AppCompatActivity implements View.OnClickLi
     private void setQuestion(){
         Random gen = new Random();
         q1 = gen.nextInt(questions.length);
-        q2 = gen.nextInt(questions.length);         //may have repeated numbers
+        do{
+            q2 = gen.nextInt(questions.length);         //may have repeated numbers
+        }while(q1 == q2);
 
         que1.setText(questions[q1]);
         que2.setText(questions[q2]);
@@ -86,6 +98,20 @@ public class ResetPwActivity extends AppCompatActivity implements View.OnClickLi
             case 1:
                 flag = false;
                 break;
+            case 2:
+                flag = true;
+                break;
+            case 3:
+                String str = SharedPrefUtil.getValue(SharedPrefUtil.GUIDE, SharedPrefUtil.VAL_NAME, "N//A", getApplicationContext());
+                if(str.equalsIgnoreCase(ans)){
+                    flag = true;
+                }else{
+                    flag = false;
+                }
+                break;
+            case 4:
+                break;
+
             default:;
                 break;
         }
@@ -94,7 +120,7 @@ public class ResetPwActivity extends AppCompatActivity implements View.OnClickLi
 
     private boolean isCorrect(){
 
-        boolean f0, f1, f2;
+        boolean f0, f1, f2, f3, f4;
 
         String a0 = ans0.getText().toString();
         String a1 = ans1.getText().toString();
@@ -103,6 +129,8 @@ public class ResetPwActivity extends AppCompatActivity implements View.OnClickLi
         f0 = true;
         f1 = correctAnswer(q1, a1);
         f2 = correctAnswer(q2, a2);
+
+
         return f0&&f1&&f2;
     }
 

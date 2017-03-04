@@ -14,7 +14,6 @@ import android.widget.Toast;
 import com.zixuanz.mysecretdiary.DataStructures.Home.Diary;
 import com.zixuanz.mysecretdiary.R;
 
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -22,13 +21,15 @@ import java.util.List;
  * Created by Zixuan Zhao on 2/19/17.
  */
 
-public class HomeRecyViewAdapter extends RecyclerView.Adapter {
+public class HomeRecyViewAdapter extends RecyclerView.Adapter implements View.OnClickListener{
 
     private final static int WITHOUT_IMG = 0;
     private final static int WITH_IMG = 1;
 
     private List<Diary> diaries;
     private Context context;
+
+    private OnItemClickListener itemClickListener;
 
     public HomeRecyViewAdapter(List<Diary> diaries, Context context) {
         this.diaries = diaries;
@@ -47,6 +48,8 @@ public class HomeRecyViewAdapter extends RecyclerView.Adapter {
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recy_adp_hm_noimg, parent, false);
                 break;
         }
+
+        view.setOnClickListener(this);
 
         return new WithoutImageHolder(view);
     }
@@ -74,6 +77,13 @@ public class HomeRecyViewAdapter extends RecyclerView.Adapter {
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        if(itemClickListener != null){
+            itemClickListener.onItemClick(v);
+        }
+    }
+
     private static class WithoutImageHolder extends RecyclerView.ViewHolder{
         CardView cardView;
         TextView date;
@@ -90,13 +100,17 @@ public class HomeRecyViewAdapter extends RecyclerView.Adapter {
             this.emotion = (TextView) view.findViewById(R.id.tv_recv_hm_emt);
             this.ctx = (TextView) view.findViewById(R.id.tv_recy_hm_ctx);
 
-            this.cardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d("HomeRecyViewAdapter:::", "WithoutImageHolder");
-                }
-            });
         }
+
+
+    }
+
+    public void setClickListener(OnItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
+
+    public static interface OnItemClickListener {
+        void onItemClick(View view);
     }
 
 

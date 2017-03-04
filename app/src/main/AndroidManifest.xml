@@ -18,7 +18,7 @@
         <activity android:name=".GuideActivity" />
         <activity
             android:name=".PassActivity"
-            android:parentActivityName=".PassActivity"/>
+            android:parentActivityName=".PassActivity" />
         <activity android:name=".HomeActivity" />
         <activity
             android:name=".WritingActivity"
@@ -31,7 +31,9 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".ResetPwActivity"></activity>
+        <activity android:name=".ResetPwActivity" />
+
+        <activity android:name=".SettingActivity"></activity>
     </application>
 
 </manifest>

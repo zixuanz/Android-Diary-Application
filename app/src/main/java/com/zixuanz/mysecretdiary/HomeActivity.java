@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.zixuanz.mysecretdiary.Adapters.HomeRecyViewAdapter;
 import com.zixuanz.mysecretdiary.DataStructures.Home.Diary;
@@ -29,6 +30,7 @@ public class HomeActivity extends AppCompatActivity{
 
     private RecyclerView recyclerView;
     private HomeRecyViewAdapter homeRecyViewAdapter;
+
 
     private FloatingActionButton newDiary;
 
@@ -78,6 +80,13 @@ public class HomeActivity extends AppCompatActivity{
         recyclerView = (RecyclerView) findViewById(R.id.rv_home);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         homeRecyViewAdapter = new HomeRecyViewAdapter(diaries, HomeActivity.this);
+        homeRecyViewAdapter.setClickListener(new HomeRecyViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view) {
+                TextView date = (TextView) view.findViewById(R.id.tv_recy_hm_date);
+                Log.d("HomeActivity:::", "" + date.getText().toString());
+            }
+        });
         recyclerView.setAdapter(homeRecyViewAdapter);
 
         newDiary = (FloatingActionButton) findViewById(R.id.fab_home_new);
@@ -93,18 +102,21 @@ public class HomeActivity extends AppCompatActivity{
     private void initToolbar(){
         toolbar = (Toolbar) findViewById(R.id.tb_home);
         toolbar.inflateMenu(R.menu.menu_home_toolbar);
-        setSupportActionBar(toolbar);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()){
-                    case R.id.action_settings:
-                        Log.d("HomeActivity:::", "Action_Setting");
+                    case R.id.home_settings:
+                        Log.d("HomeActivity:::", "home_Setting");
+                        Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
+                        startActivity(intent);
                         break;
                 }
                 return true;
             }
         });
+
+        //setSupportActionBar(toolbar);
     }
 
     private void setDataDiary() {

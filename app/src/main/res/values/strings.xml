@@ -34,7 +34,7 @@
 
     <string name="tv_act_pw">Please enter you secrete word to unlock the door to your friend!</string>
 
-    <string name="tv_act_pw_reset">Answer question and input new secrete word. If answers are correct, the secrete word will be reset:</string>
+    <string name="tv_act_pw_reset">Answer question and input new secrete word. If answers are correct, the secrete word will be reset. If you have not done what question asks, please enter N//A:</string>
 
     <string name="tv_act_pw_newps">Please enter your new secrete word:</string>
 
@@ -42,4 +42,15 @@
     <!--In ResetPwActivity and corresponding xml-->
     <string name="succ_reset">Secrete Word is reset.</string>
     <string name="fali_reset">Answers are not correct.</string>
+
+    <string name="reset_q1">What is your last diary\'s emotion\?</string>
+    <string name="reset_q2">What is your last diary\'s weather\?</string>
+    <string name="reset_q3">What is your friends name?</string>
+    <string name="reset_q4">What is your </string>
+    <string name="title_activity_settings">Settings</string>
+
+
+    <!--Preference Settings-->
+    <string name="pref_header_sync">Backup</string>
+
 </resources>
