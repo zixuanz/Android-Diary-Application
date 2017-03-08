@@ -16,8 +16,6 @@ import com.zixuanz.mysecretdiary.GuideActivity;
 
 public class GuideFragPagerAdapter extends FragmentPagerAdapter {
 
-    private static final int PAGE_NUM = 3;
-
     private PasswordFrag passwordFrag;
     private NameFrag nameFrag;
     private ShowFrag showFrag;
@@ -59,6 +57,6 @@ public class GuideFragPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return PAGE_NUM;
+        return GuideActivity.PAGE_COUNT;
     }
 }

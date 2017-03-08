@@ -7,6 +7,7 @@ import android.os.Build;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -32,5 +33,9 @@ public class Tools {
 
     public static String getCurrentDateTime(){
         return dateTimeformat.format(Calendar.getInstance().getTime());
+    }
+
+    public static String setDateFormat(Calendar calendar){
+        return onlyDateFormat.format(calendar.getTime());
     }
 }

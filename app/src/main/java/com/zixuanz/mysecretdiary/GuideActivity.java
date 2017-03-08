@@ -20,6 +20,7 @@ public class GuideActivity extends AppCompatActivity implements ViewPager.OnPage
     public static final int PAGE_NAME = 0;
     public static final int PAGE_PW = 1;
     public static final int PAGE_SHOW = 2;
+    public static final int PAGE_COUNT = 3;
 
     private ViewPager viewPager;
     private GuideFragPagerAdapter gdFragPager;

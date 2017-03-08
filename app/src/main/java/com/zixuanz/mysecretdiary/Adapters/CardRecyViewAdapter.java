@@ -1,15 +1,12 @@
 package com.zixuanz.mysecretdiary.Adapters;
 
 import android.content.Context;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.zixuanz.mysecretdiary.DataStructures.Home.Diary;
 import com.zixuanz.mysecretdiary.R;
@@ -21,7 +18,7 @@ import java.util.List;
  * Created by Zixuan Zhao on 2/19/17.
  */
 
-public class HomeRecyViewAdapter extends RecyclerView.Adapter implements View.OnClickListener{
+public class CardRecyViewAdapter extends RecyclerView.Adapter implements View.OnClickListener{
 
     private final static int WITHOUT_IMG = 0;
     private final static int WITH_IMG = 1;
@@ -31,7 +28,7 @@ public class HomeRecyViewAdapter extends RecyclerView.Adapter implements View.On
 
     private OnItemClickListener itemClickListener;
 
-    public HomeRecyViewAdapter(List<Diary> diaries, Context context) {
+    public CardRecyViewAdapter(List<Diary> diaries, Context context) {
         this.diaries = diaries;
         this.context = context;
     }
@@ -41,11 +38,11 @@ public class HomeRecyViewAdapter extends RecyclerView.Adapter implements View.On
         View view;
         switch (viewType){
             case WITH_IMG:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recy_adp_hm_noimg, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recy_adp_cv_noimg, parent, false);
                 break;
             default:
             case WITHOUT_IMG:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recy_adp_hm_noimg, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recy_adp_cv_noimg, parent, false);
                 break;
         }
 

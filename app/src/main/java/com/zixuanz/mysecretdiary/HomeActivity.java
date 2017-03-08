@@ -2,8 +2,8 @@ package com.zixuanz.mysecretdiary;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,80 +14,71 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.zixuanz.mysecretdiary.Adapters.HomeRecyViewAdapter;
+import com.zixuanz.mysecretdiary.Adapters.CardRecyViewAdapter;
+import com.zixuanz.mysecretdiary.Adapters.HomeFragPagerAdapter;
 import com.zixuanz.mysecretdiary.DataStructures.Home.Diary;
 import com.zixuanz.mysecretdiary.Utils.DataBaseManager;
-import com.zixuanz.mysecretdiary.Utils.Tools;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
-public class HomeActivity extends AppCompatActivity{
+public class HomeActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener{
+
+    public static final int PAGE_CARD = 0;
+    public static final int PAGE_CALENDAR = 1;
+    public static final int PAGE_COUNT = 2;
 
     private Toolbar toolbar;
 
-    private RecyclerView recyclerView;
-    private HomeRecyViewAdapter homeRecyViewAdapter;
-
+    private ViewPager viewPager;
+    private HomeFragPagerAdapter homeFragPager;
 
     private FloatingActionButton newDiary;
-
-    private DataBaseManager dbManager;
-    private List<Diary> diaries;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        dbManager = new DataBaseManager(getApplicationContext());
         initViews();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d("HomeActivity:::", "onPause");
+        //Log.d("HomeActivity:::", "onPause");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        Log.d("HomeActivity:::", "onResume");
-
-        AcquireDiary acquireDiary = new AcquireDiary();
-        acquireDiary.execute();
-        Log.d("HomeActivity:::", "diaries--"+diaries.size());
-
+        //Log.d("HomeActivity:::", "onResume");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d("HomeActivity:::", "onDestroy");
-        dbManager.closeDatabase();
+        //Log.d("HomeActivity:::", "onDestroy");
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
     }
 
     private void initViews() {
 
         initToolbar();
-
-        diaries = new ArrayList<>();
-
-        recyclerView = (RecyclerView) findViewById(R.id.rv_home);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        homeRecyViewAdapter = new HomeRecyViewAdapter(diaries, HomeActivity.this);
-        homeRecyViewAdapter.setClickListener(new HomeRecyViewAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view) {
-                TextView date = (TextView) view.findViewById(R.id.tv_recy_hm_date);
-                Log.d("HomeActivity:::", "" + date.getText().toString());
-            }
-        });
-        recyclerView.setAdapter(homeRecyViewAdapter);
+        initViewpager();
 
         newDiary = (FloatingActionButton) findViewById(R.id.fab_home_new);
         newDiary.setOnClickListener(new View.OnClickListener() {
@@ -119,32 +110,11 @@ public class HomeActivity extends AppCompatActivity{
         //setSupportActionBar(toolbar);
     }
 
-    private void setDataDiary() {
-        dbManager.queryAll(diaries);
+    private void initViewpager(){
+        homeFragPager = new HomeFragPagerAdapter(getSupportFragmentManager());
+        viewPager = (ViewPager)findViewById(R.id.vp_home);
+        viewPager.setAdapter(homeFragPager);
+        viewPager.setCurrentItem(0);
+        viewPager.addOnPageChangeListener(this);
     }
-
-
-    private class CheckToday extends AsyncTask<Void, Void, Void>{
-        @Override
-        protected Void doInBackground(Void... params) {
-            dbManager.openReadableDatabase();
-            return null;
-        }
-    }
-
-
-    private class AcquireDiary extends AsyncTask<Void, Void, Void>{
-        @Override
-        protected Void doInBackground(Void... params) {
-            dbManager.openReadableDatabase();
-            setDataDiary();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            homeRecyViewAdapter.notifyDataSetChanged();
-        }
-    }
-
 }
